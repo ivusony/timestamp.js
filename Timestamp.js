@@ -69,16 +69,47 @@ date.define('month', function(opt){
     }
 })
 
+date.define('year', function(opt){
+    let y = date.d.getFullYear().toString();
+    let yObj = {
+        fullYear :  y,
+        short   : y.substr(2)
+    }
+    if(!opt){
+        return yObj.short
+    }else{
+        return  opt==='s' ? yObj.short
+            :   opt==='l' ? yObj.fullYear
+            :   undefined
+    }
+})
+
+date.define('time', function(opt){
+    let t = {
+        h   :   date.d.getHours(),
+        m   :   date.d.getMinutes(),
+        s   :   date.d.getSeconds(),
+        ms  :   date.d.getMilliseconds()
+    }
+    if(!opt){
+        return `${adjustTime(t.h)}:${adjustTime(t.m)}`
+    }
+
+    opt.forEach(el => {
+        console.log(t[el])
+    });
+    function adjustTime(t){
+        if (t < 10) {
+            return `0${t}`
+        }else{
+            return t
+        }
+    }
+   
+})
 
 module.exports = date
 
-// Timestamp.prototype.adjustTime = function(time){
-//     if (time < 10) {
-//         return `0${time}`
-//     }else{
-//         return time
-//     }
-// }
 
 // Timestamp.prototype.now = function(){
 //     let dateObj         = new Date();
