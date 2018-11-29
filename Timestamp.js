@@ -74,10 +74,11 @@ Timestamp.prototype.format = function(opt){
 //instantiating new object
 let date = new Timestamp();
 
+
 //defining new query string in the e property of the new object and setting its value to the function
 //which takes only one optional argument, the option how we want to display the name of the day
 date.define('day',function(opt){
-    let d = date.d.getUTCDay()+1;
+    let d = this.d.getUTCDay()+1;
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let dayObj = {
         fullDay : days[d-1],
@@ -91,7 +92,7 @@ date.define('day',function(opt){
             : opt==="l" ? dayObj.fullDay
             : undefined
     }
-})
+}.bind(date))
 //defining new query string in the e property of the new object and setting its value to the function
 //which takes no arguments. Returning day in month folowed by the apropriate string depending on day
 date.define('date', function(){
@@ -105,7 +106,7 @@ date.define('date', function(){
 //which takes an option argument. Returning short or long version of month. If no option provided, 
 //returning the short vesrion
 date.define('month', function(opt){
-    let m = date.d.getMonth();
+    let m = this.d.getMonth();
     let months = ['January', 'February', 'March', 'April', 'May', 'Jun', 'Jul', 'August', 'Septemper', 'October', 'November', 'December'];
     let mObj =  {
         fullMonth   : months[m],
@@ -120,10 +121,10 @@ date.define('month', function(opt){
             :   opt==='n' ? mObj.number
             :   undefined
     }
-})
+}.bind(date))
 //returns short or long version of current year
 date.define('year', function(opt){
-    let y = date.d.getFullYear().toString();
+    let y = this.d.getFullYear().toString();
     let yObj = {
         fullYear :  y,
         short   : y.substr(2)
@@ -135,14 +136,15 @@ date.define('year', function(opt){
             :   opt==='l' ? yObj.fullYear
             :   undefined
     }
-})
+}.bind(date))
 //returns current time
 date.define('time', function(opt){
+    let dt = this.d;
     let t = {
-        h   :   date.d.getHours(),
-        m   :   date.d.getMinutes(),
-        s   :   date.d.getSeconds(),
-        ms  :   date.d.getMilliseconds()
+        h   :   dt.getHours(),
+        m   :   dt.getMinutes(),
+        s   :   dt.getSeconds(),
+        ms  :   dt.getMilliseconds()
     }
     if (opt==="s") {
         return  t.h<12 ? `${adjustTime(t.h)}:${adjustTime(t.m)} AM` : `${adjustTime(t.h)}:${adjustTime(t.m)} PM`
@@ -160,6 +162,6 @@ date.define('time', function(opt){
             return t
         }
     }
-})
+}.bind(date))
 //exports date object
 module.exports = date
